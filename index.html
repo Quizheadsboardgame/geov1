@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEOGRAPHY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="DC Comics Logo">
+    <h1>GEOGRAPHY</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "What is the name of the tallest mountain in the world?", answer: "Mount Everest" },
+        { question: "Which country has the largest population in the world?", answer: "China" },
+        { question: "What are the names of the seven continents of the world?", answer: "Asia, Africa, North America, South America, Antarctica, Europe, Australia" },
+        { question: "What are the names of the five oceans of the world?", answer: "Atlantic, Pacific, Indian, Arctic, and the Antarctic" },
+        { question: "What is the name of the longest river in Africa?", answer: "The Nile River" },
+        { question: "What American city is the Golden Gate Bridge located in?", answer: "San Francisco" },
+        { question: "What is the capital of Mexico?", answer: "Mexico City" },
+        { question: "What is the name of the largest country in the world?", answer: "Russia" },
+        { question: "What U.S. state is home to no documented poisonous snakes?", answer: "Alaska" },
+        { question: "Where is the Eiffel Tower located?", answer: "Paris, France" },
+        { question: "What is the capital of Canada?", answer: "Ottawa" },
+        { question: "What is the name of the largest ocean in the world?", answer: "The Pacific Ocean" },
+        { question: "What present-day Italian city does Mt. Vesuvius overlook?", answer: "Naples" },
+        { question: "What country are the Great Pyramids of Giza located in?", answer: "Egypt" },
+        { question: "What is the capital of Thailand?", answer: "Bangkok" },
+        { question: "What is the name of the smallest country in the world?", answer: "The Vatican City" },
+        { question: "What is the capital of the American State of California?", answer: "Sacramento" },
+        { question: "What country has the most natural lakes?", answer: "Canada" },
+        { question: "How many States does the United States consist of?", answer: "50" },
+        { question: "What planet is closest to Earth?", answer: "Venus" },
+        { question: "What is the name of the river that flows through the Brazilian rainforest?", answer: "The Amazon" },
+        { question: "Which country is also called The Netherlands?", answer: "Holland" },
+        { question: "What is the coldest place on Earth?", answer: "Antarctica" },
+        { question: "What is the official currency of the United Kingdom?", answer: "Pound sterling" },
+        { question: "What country lies above Mexico?", answer: "The United States of America" },
+        { question: "Where are the Spanish Steps located?", answer: "Rome, Italy" },
+        { question: "How many countries are there in the United Kingdom?", answer: "4" },
+        { question: "What is the capital of Senegal?", answer: "Dakar" },
+        { question: "How many time zones does Russia have?", answer: "11" },
+        { question: "What is the name of the tallest mountain in Canada?", answer: "Mount Logan" },
+        { question: "What country does the Rhine River run through?", answer: "Germany" },
+        { question: "What two countries border directly north of Hungary?", answer: "Slovakia and Ukraine" },
+        { question: "What is the name of the largest city in Australia?", answer: "Brisbane" },
+        { question: "What is the name of the second tallest mountain in the world?", answer: "K2" },
+        { question: "What Cape sits at the tip of Africa?", answer: "Cape of Good Hope" },
+        { question: "What type of leaf is on the Canadian flag?", answer: "Maple" },
+        { question: "What is the capital of Nova Scotia?", answer: "Halifax" },
+        { question: "What country first used tinsel as a holiday tree decoration?", answer: "Germany" },
+        { question: "What is the name of the only tropical rainforest in the United States?", answer: "Puerto Rico’s El Yunque National Forest" },
+        { question: "What season does Australia experience in December?", answer: "Summer" },
+        { question: "What is the name of the driest continent on Earth?", answer: "Antarctica" },
+        { question: "Peking Duck is the national dish of what country?", answer: "China" },
+        { question: "In which European city was the first organized marathon held?", answer: "Athens" },
+        { question: "What country formerly ruled Iceland?", answer: "Denmark" },
+        { question: "What is the name of the largest airport in the United States of America?", answer: "Denver International Airport" },
+        { question: "Which continent is Cambodia located in?", answer: "Asia" },
+        { question: "What country is known to have the best quality tap water?", answer: "Switzerland" },
+        { question: "In what ocean is the Bermuda Triangle located?", answer: "Atlantic Ocean" },
+        { question: "What city is known as the Glass Capital of the World?", answer: "Toledo" },
+        { question: "How many stars are on the Australian flag?", answer: "6" },
+        { question: "Pierre is the capital of what US state?", answer: "South Dakota" },
+        { question: "What is the name of the smallest US state?", answer: "Rhode Island" },
+        { question: "What ocean borders the state of Florida?", answer: "Atlantic Ocean" },
+        { question: "What US states share a border with Mexico?", answer: "California, Arizona, New Mexico, Texas" },
+        { question: "What is the name of the longest river in the US?", answer: "Missouri River" },
+        { question: "What is the name of the tallest mountain in the US?", answer: "Mount McKinley" },
+        { question: "What is the lowest point of the US?", answer: "Death Valley" },
+        { question: "What are the names of the five Great Lakes?", answer: "Superior, Ontario, Erie, Michigan, Huron" },
+        { question: "What is the name of the flattest state in the US?", answer: "Florida" },
+        { question: "What two states do not share a border with any other US state?", answer: "Hawaii and Alaska" },
+        { question: "What state is Mount Rushmore located in?", answer: "South Dakota" },
+        { question: "What is the name of the largest lake in the US?", answer: "Lake Superior" },
+        { question: "In what state would you find the North Mojave Desert?", answer: "Nevada" },
+        { question: "What is the coldest state in the US?", answer: "Alaska" },
+        { question: "How many US states share a border with Canada?", answer: "13" },
+        { question: "What is the largest bay in the US?", answer: "The Chesapeake Bay" },
+        { question: "What city is the White House located in?", answer: "Washington, D.C." },
+        { question: "How many time zones are there in the US?", answer: "6" },
+        { question: "Which US state is known as The Garden State?", answer: "New Jersey" },
+        { question: "What state has the fewest counties?", answer: "Delaware" },
+        { question: "Which state was purchased from Russia in 1867?", answer: "Alaska" },
+        { question: "What state is known as The Heart of Dixie?", answer: "Alabama" },
+        { question: "What is the name of the only living coral barrier reef in the continental United States?", answer: "The Florida Reef" },
+        { question: "What state is known as The First State?", answer: "Delaware" },
+        { question: "How many total islands does Hawaii have?", answer: "132" },
+        { question: "The Lord of The Rings trilogy was filmed in what country?", answer: "New Zealand" },
+        { question: "Which direction do latitude lines run on a globe?", answer: "Left to right" },
+        { question: "What is the capital of Jamaica?", answer: "Kingston" },
+        { question: "What place is known as the largest micro-continent?", answer: "Madagascar" },
+        { question: "What is Europe named after?", answer: "A princess from Greek mythology" },
+        { question: "What is the only country that borders the United Kingdom?", answer: "Ireland" },
+        { question: "What country was not part of the Soviet Union?", answer: "Romania" },
+        { question: "Mt. Fuji is the highest point located in which Asian country?", answer: "Japan" },
+        { question: "What is the name of the deepest point in Earth’s oceans?", answer: "Mariana’s Trench" },
+        { question: "What is the name of the coldest sea on Earth?", answer: "The Arctic" },
+        { question: "How many time zones does Australia have?", answer: "3" },
+        { question: "How many countries are located in the Southern Hemisphere?", answer: "32" },
+        { question: "Does Japan’s traffic run on the left or right?", answer: "Left" },
+        { question: "What is the name of the third-longest river in the world?", answer: "Yangtze River" },
+        { question: "What river flows through the Grand Canyon?", answer: "Colorado River" },
+        { question: "What is the largest country in South America?", answer: "Brazil" },
+        { question: "What is the name of the world’s largest island?", answer: "Greenland" },
+        { question: "What country ends with the letter Q?", answer: "Iraq" },
+        { question: "Off of which coast is the Great Barrier Reef located?", answer: "Queensland" },
+        { question: "How many countries are there in Africa?", answer: "54" },
+        { question: "Which country is home to the most volcanos?", answer: "Indonesia" },
+        { question: "What is the name of the largest waterfall in the world?", answer: "Victoria Falls" },
+        { question: "What are citizens of Sudan called?", answer: "Sudanese" },
+        { question: "In which country is the Leaning Tower of Pisa located?", answer: "Italy" }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
